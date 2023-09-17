@@ -3,6 +3,9 @@ import Screen from "../components/Screen";
 import TableData from "../components/TableData";
 import { Box, Button, Modal } from "@mui/material";
 import { FaRegPlusSquare } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { addPlayer, updatePlayer } from '../redux/action/playerActions';
+import { v4 as uuidv4 } from 'uuid';
 
 const style = {
   position: "absolute",
@@ -23,6 +26,28 @@ const style = {
 
 function Home() {
   const [open, setOpen] = useState(false);
+  const [player, setPlayer] = useState({ id: '', name: '', money: 0, type: '' });
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const dispatch = useDispatch();
+  
+  const handleEdit = (selectedPlayer) => {
+    // When editing an existing player, set isEditMode to true and populate the form with player data
+    setIsEditMode(true);
+    setPlayer(selectedPlayer);
+  };
+  const handleSave = () => {
+    if (isEditMode) {
+      // Update an existing player
+      dispatch(updatePlayer(player));
+    } else {
+      // Add a new player
+      const newPlayer = { id: uuidv4(), ...player }; // Generate a unique ID
+      dispatch(addPlayer(newPlayer));
+    }
+  };
+
+
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="text-end w-full mb-4">
