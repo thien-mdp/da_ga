@@ -60,7 +60,7 @@ const Screen = ({ data }) => {
     <div className="w-2/3 p-1 rounded-lg bg-gradient-to-r from-indigo-400 to-cyan-400">
       <div className="w-full p-8 text-center rounded-md bg-sky-100">
         <Typography variant="h3" fontWeight="600">
-          Tổng cược : {total.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
+          Tổng cược : {total?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
         </Typography>
 
         <div className="!flex !flex-wrap !justify-around !my-5 !w-full">
