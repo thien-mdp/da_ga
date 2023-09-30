@@ -83,7 +83,7 @@ function Home() {
           </span>
         </button>
       </div>
-      <Screen />
+      <Screen data={playerReducer.players} />
       <TableData data={playerReducer.players} />
       <Modal
         open={open}
