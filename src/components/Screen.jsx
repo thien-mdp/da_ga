@@ -65,12 +65,12 @@ const Screen = ({ data }) => {
 
         <div className="!flex !flex-wrap !justify-around !my-5 !w-full">
           <Button onClick={chooseRed} className="w-[30vh] h-[30vh] !p-0 !rounded-2xl">
-            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-rose-500 dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl">
+            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-rose-500 rounded-2xl">
               Đỏ
             </div>
           </Button>
           <Button onClick={chooseBlue} className="w-[30vh] h-[30vh] !p-0 !rounded-2xl">
-            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-blue-500 dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl">
+            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-blue-500 rounded-2xl">
               Xanh
             </div>
           </Button>
