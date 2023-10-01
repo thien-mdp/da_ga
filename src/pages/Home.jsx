@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import Screen from "../components/Screen";
 import TableData from "../components/TableData";
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Button, Modal, Tab } from "@mui/material";
 import { FaRegPlusSquare } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { addPlayer, updatePlayer } from "../redux/action/playerActions";
 import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
-
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useEffect } from "react";
+import { tab } from "@testing-library/user-event/dist/tab";
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,15 +28,17 @@ const style = {
 };
 
 function Home() {
+  const [value, setValue] = useState("1");
   const [open, setOpen] = useState(false);
   const [player, setPlayer] = useState({});
+  const [dataTabs, setDataTabs] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const dispatch = useDispatch();
   const playerReducer = useSelector((state) => state.playerReducer);
 
-  const handleOnChange = (e) => {
-    setPlayer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const [numTabs, setNumTabs] = useState(1); // Số lượng tab ban đầu
+  const [tabData, setTabData] = useState([{ label: "Bàn 1", value: "1" }]);
+
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -47,7 +51,25 @@ function Home() {
       toast.addEventListener("mouseleave", Swal.resumeTimer);
     },
   });
+  useEffect(() => {
+    setDataTabs(playerReducer);
+  }, [value]);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleOnChange = (e) => {
+    setPlayer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+  const handleCreateTab = () => {
+    if (numTabs <= 4) {
+      const newNumTabs = numTabs + 1;
+      const newTabData = [...tabData, { label: `Bàn ${newNumTabs}`, value: `${newNumTabs}` }];
+      setNumTabs(newNumTabs);
+      setTabData(newTabData);
+    }
+  };
   const handleEdit = (selectedPlayer) => {
     // When editing an existing player, set isEditMode to true and populate the form with player data
     setIsEditMode(true);
@@ -72,19 +94,42 @@ function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="w-full mb-4 text-end">
-        <button
-          className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 "
-          onClick={() => setOpen(true)}
-        >
-          <span className="flex items-center relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
-            <FaRegPlusSquare className="mr-2 text-md" /> Tạo mới
-          </span>
-        </button>
+    <>
+      <div className="text-end">
+        <Button variant="contained" onClick={handleCreateTab}>
+          Tạo bàn chơi mới
+        </Button>
       </div>
-      <Screen data={playerReducer.players} />
-      <TableData data={playerReducer.players} />
+
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            {tabData.map((tab) => (
+              <Tab key={tab.value} label={tab.label} value={tab.value} />
+            ))}
+          </TabList>
+        </Box>
+        <div className="bg-white">
+          {tabData.map((tab) => (
+            <TabPanel key={tab.value} value={tab.value}>
+              <div className="flex flex-col items-center justify-center">
+                <div className="w-full mb-4 text-end">
+                  <button
+                    className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 "
+                    onClick={() => setOpen(true)}
+                  >
+                    <span className="flex items-center relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
+                      <FaRegPlusSquare className="mr-2 text-md" /> Tạo mới
+                    </span>
+                  </button>
+                </div>
+                <Screen data={playerReducer?.players} />
+                <TableData data={playerReducer?.players} />
+              </div>
+            </TabPanel>
+          ))}
+        </div>
+      </TabContext>
       <Modal
         open={open}
         onClose={() => setOpen(!open)}
@@ -207,7 +252,7 @@ function Home() {
           </div>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }
 
