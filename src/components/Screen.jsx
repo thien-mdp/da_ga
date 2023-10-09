@@ -57,20 +57,17 @@ const Screen = ({ data }) => {
   };
 
   return (
-    <div className="w-2/3 p-1 rounded-lg bg-gradient-to-r from-indigo-400 to-cyan-400">
+    <div className="w-2/3 p-1 rounded-lg bg-gradient-to-r from-indigo-200 to-cyan-200">
       <div className="w-full p-8 text-center rounded-md bg-sky-100">
-        <Typography variant="h3" fontWeight="600">
-          Tổng cược : {total?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
-        </Typography>
-
-        <div className="!flex !flex-wrap !justify-around !my-5 !w-full">
-          <Button onClick={chooseRed} className="w-[30vh] h-[30vh] !p-0 !rounded-2xl">
-            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-rose-500 rounded-2xl">
+        <p> Tổng cược : {total?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</p>
+        <div className="grid grid-cols-2 gap-6 !my-5 !w-full">
+          <Button onClick={chooseRed} className="w-full !p-0 !rounded-2xl">
+            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-rose-400 rounded-2xl">
               Đỏ
             </div>
           </Button>
-          <Button onClick={chooseBlue} className="w-[30vh] h-[30vh] !p-0 !rounded-2xl">
-            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-blue-500 rounded-2xl">
+          <Button onClick={chooseBlue} className="w-full !p-0 !rounded-2xl">
+            <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-gray-800 bg-blue-400 rounded-2xl">
               Xanh
             </div>
           </Button>

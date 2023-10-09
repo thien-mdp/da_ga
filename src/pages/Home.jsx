@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Screen from "../components/Screen";
 import TableData from "../components/TableData";
-import { Box, Button, Modal, Tab } from "@mui/material";
+import { Box, Button, Modal, Tab, Tooltip } from "@mui/material";
 import { FaRegPlusSquare } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { addPlayer, updatePlayer } from "../redux/action/playerActions";
@@ -28,7 +28,7 @@ const style = {
 };
 
 function Home() {
-  const [value, setValue] = useState("1");
+  const [valueTabs, setValueTabs] = useState("1");
   const [open, setOpen] = useState(false);
   const [player, setPlayer] = useState({});
   const [dataTabs, setDataTabs] = useState([]);
@@ -37,7 +37,7 @@ function Home() {
   const playerReducer = useSelector((state) => state.playerReducer);
 
   const [numTabs, setNumTabs] = useState(1); // Số lượng tab ban đầu
-  const [tabData, setTabData] = useState([{ label: "Bàn 1", value: "1" }]);
+  const [tabData, setTabData] = useState([{ label: "Bàn chơi 1", value: "1" }]);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -51,12 +51,14 @@ function Home() {
       toast.addEventListener("mouseleave", Swal.resumeTimer);
     },
   });
+
   useEffect(() => {
-    setDataTabs(playerReducer);
-  }, [value]);
+    // setDataTabs(playerReducer?.players);
+    setDataTabs(playerReducer?.players?.filter((item) => item.roomID === valueTabs));
+  }, [valueTabs, playerReducer?.players]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValueTabs(newValue);
   };
 
   const handleOnChange = (e) => {
@@ -65,7 +67,7 @@ function Home() {
   const handleCreateTab = () => {
     if (numTabs <= 4) {
       const newNumTabs = numTabs + 1;
-      const newTabData = [...tabData, { label: `Bàn ${newNumTabs}`, value: `${newNumTabs}` }];
+      const newTabData = [...tabData, { label: `Bàn chơi ${newNumTabs}`, value: `${newNumTabs}` }];
       setNumTabs(newNumTabs);
       setTabData(newTabData);
     }
@@ -83,7 +85,7 @@ function Home() {
       setOpen(false);
     } else {
       // Add a new player
-      const newPlayer = { id: uuidv4(), ...player }; // Generate a unique ID
+      const newPlayer = { id: uuidv4(), ...player, roomID: valueTabs }; // Generate a unique ID
       Toast.fire({
         icon: "success",
         title: "Thêm mới thành công",
@@ -92,27 +94,34 @@ function Home() {
       setOpen(false);
     }
   };
-
+  console.log("value", valueTabs);
   return (
     <>
       <div className="text-end">
-        <Button variant="contained" onClick={handleCreateTab}>
-          Tạo bàn chơi mới
-        </Button>
+        <Tooltip title="Tối đa 5 bàn chơi">
+          <button
+            className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-red-100 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 "
+            onClick={handleCreateTab}
+          >
+            <span className="flex items-center relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
+              Thêm bàn chơi
+            </span>
+          </button>
+        </Tooltip>
       </div>
 
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <TabContext value={valueTabs}>
+        <Box>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             {tabData.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
+              <Tab key={tab.value} label={tab.label} value={tab.value} className="!rounded-2xl" />
             ))}
           </TabList>
         </Box>
-        <div className="bg-white">
+        <div className="bg-teal-100 !rounded-2xl mt-2">
           {tabData.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center ">
                 <div className="w-full mb-4 text-end">
                   <button
                     className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 "
@@ -123,8 +132,8 @@ function Home() {
                     </span>
                   </button>
                 </div>
-                <Screen data={playerReducer?.players} />
-                <TableData data={playerReducer?.players} />
+                <Screen data={dataTabs} />
+                <TableData data={dataTabs} />
               </div>
             </TabPanel>
           ))}
@@ -231,20 +240,20 @@ function Home() {
 
               <div className="flex justify-around mx-[20%]">
                 <button
-                  type="submit"
-                  className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 "
-                >
-                  <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
-                    Xác nhận
-                  </span>
-                </button>
-                <button
                   type="reset"
                   onClick={(e) => setPlayer({})}
                   className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-red-100 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 "
                 >
                   <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
-                    Reset
+                    Reset form
+                  </span>
+                </button>
+                <button
+                  type="submit"
+                  className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-300 to-lime-300 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-lime-200 group-hover:from-teal-300 group-hover:to-lime-300 "
+                >
+                  <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
+                    Xác nhận
                   </span>
                 </button>
               </div>
