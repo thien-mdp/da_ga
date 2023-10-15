@@ -83,8 +83,6 @@ function Home() {
     var handleData = {
       idRed: player.idRed,
       idBlue: player.idBlue,
-      percentRed: player.percentRed,
-      percentBlue: player.percentBlue,
       createAt: formattedDate,
       data: [
         { id: player.idRed, percent: player.percentRed },
