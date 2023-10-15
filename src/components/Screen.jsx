@@ -57,9 +57,9 @@ const Screen = ({ data }) => {
   };
 
   return (
-    <div className="w-2/3 p-1 rounded-lg bg-gradient-to-r from-indigo-200 to-cyan-200">
+    <div className="w-2/3 p-1 my-4 rounded-lg bg-gradient-to-r from-indigo-200 to-cyan-200">
       <div className="w-full p-8 text-center rounded-md bg-sky-100">
-        <p> Tổng cược : {total?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</p>
+        {/* <p> Tổng cược : {total?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</p> */}
         <div className="grid grid-cols-2 gap-6 !my-5 !w-full">
           <Button onClick={chooseRed} className="w-full !p-0 !rounded-2xl">
             <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-rose-400 rounded-2xl">

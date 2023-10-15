@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Screen from "../components/Screen";
-import TableData from "../components/TableData";
 import { Box, Button, Modal, Tab, Tooltip } from "@mui/material";
 import { FaRegPlusSquare } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useEffect } from "react";
-import { tab } from "@testing-library/user-event/dist/tab";
+import CollapsibleTable from "../components/TableCollapse";
 const style = {
   position: "absolute",
   top: "50%",
@@ -79,13 +78,25 @@ function Home() {
   };
   const handleSave = (e) => {
     e.preventDefault();
+    const now = new Date();
+    const formattedDate = now.toLocaleString();
+    var handleData = {
+      idRed: player.idRed,
+      idBlue: player.idBlue,
+      percentRed: player.percentRed,
+      percentBlue: player.percentBlue,
+      createAt: formattedDate,
+      data: [
+        { id: player.idRed, percent: player.percentRed },
+        { id: player.idBlue, percent: player.percentBlue },
+      ],
+    };
     if (isEditMode) {
       // Update an existing player
-      dispatch(updatePlayer(player));
+      dispatch(updatePlayer(handleData));
       setOpen(false);
     } else {
-      // Add a new player
-      const newPlayer = { id: uuidv4(), ...player, roomID: valueTabs }; // Generate a unique ID
+      const newPlayer = { id: uuidv4(), ...handleData, roomID: valueTabs };
       Toast.fire({
         icon: "success",
         title: "Thêm mới thành công",
@@ -94,7 +105,6 @@ function Home() {
       setOpen(false);
     }
   };
-  console.log("value", valueTabs);
   return (
     <>
       <div className="text-end">
@@ -122,7 +132,7 @@ function Home() {
           {tabData.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
               <div className="flex flex-col items-center justify-center ">
-                <div className="w-full mb-4 text-end">
+                <div className="w-full  text-end">
                   <button
                     className="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 "
                     onClick={() => setOpen(true)}
@@ -133,7 +143,8 @@ function Home() {
                   </button>
                 </div>
                 <Screen data={dataTabs} />
-                <TableData data={dataTabs} />
+                {/* <TableData data={dataTabs} /> */}
+                <CollapsibleTable data={dataTabs} />
               </div>
             </TabPanel>
           ))}
@@ -219,7 +230,7 @@ function Home() {
                     Xanh cược
                   </label>
                 </div>
-                <div className="relative z-0 grid w-full col-span-2 mb-6 group">
+                {/* <div className="relative z-0 grid w-full col-span-2 mb-6 group">
                   <input
                     type="number"
                     name="money"
@@ -235,7 +246,7 @@ function Home() {
                   >
                     Tiền cược
                   </label>
-                </div>
+                </div> */}
               </div>
 
               <div className="flex justify-around mx-[20%]">
