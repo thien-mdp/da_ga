@@ -12,24 +12,34 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
 
 function Row(props) {
   const { row, index } = props;
   const [open, setOpen] = React.useState(false);
+  console.log(row);
 
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <FaArrowUp className="w-4 h-4" /> : <FaArrowDown className="w-4 h-4" />}
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? (
+              <FaArrowUp className="w-4 h-4" />
+            ) : (
+              <FaArrowDown className="w-4 h-4" />
+            )}
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row" align="center">
           {index + 1}
         </TableCell>
         <TableCell component="th" scope="row" className="!font-medium ">
-          Ván cược của sbd {row.idBlue} & {row.idRed}
+          Ván cược của sbd {row.idRed.name} & {row.idBlue.name}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -49,30 +59,46 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row?.data?.map((item, index) => (
-                    <TableRow key={item.name}>
-                      <TableCell component="th" scope="row">
-                        {row.createAt}
-                      </TableCell>
-                      <TableCell align="center">{item.id}</TableCell>
-                      <TableCell align="right">
-                        {parseInt(item.percent).toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
-                      </TableCell>
-                      <TableCell align="right">
-                        {index === 0
-                          ? parseInt(row.data[1].percent - (row.data[1].percent * 5) / 100).toLocaleString("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            })
-                          : index === 1
-                          ? parseInt(row.data[0].percent - (row.data[0].percent * 5) / 100).toLocaleString("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            })
-                          : ""}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow>
+                    <TableCell component="th" scope="row">
+                      {row.createAt}
+                    </TableCell>
+                    <TableCell align="center">{row.idRed.name}</TableCell>
+                    <TableCell align="right">
+                      {parseInt(row.idRed.tienCuoc).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </TableCell>
+                    <TableCell align="right">
+                      {parseInt(
+                        row.idBlue.tienCuoc - (row.idBlue.tienCuoc * 5) / 100
+                      ).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow key={row.id}>
+                    <TableCell component="th" scope="row">
+                      {row.createAt}
+                    </TableCell>
+                    <TableCell align="center">{row.idBlue.name}</TableCell>
+                    <TableCell align="right">
+                      {parseInt(row.idBlue.tienCuoc).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </TableCell>
+                    <TableCell align="right">
+                      {parseInt(
+                        row.idRed.tienCuoc - (row.idRed.tienCuoc * 5) / 100
+                      ).toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>
@@ -83,9 +109,8 @@ function Row(props) {
   );
 }
 
-export default function CollapsibleTable({ data }) {
-  const rows = data;
-  console.log(data);
+export default function CollapsibleTable({ selectedTable }) {
+  const playerReducer = useSelector((state) => state.playerReducer.players);
   return (
     <TableContainer className="!rounded-md" component={Paper}>
       <Table aria-label="collapsible table">
@@ -99,9 +124,11 @@ export default function CollapsibleTable({ data }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.map((row, index) => (
-            <Row key={row.id} row={row} index={index} />
-          ))}
+          {playerReducer
+            .filter((a) => a.tableId === selectedTable.id)
+            ?.map((row, index) => (
+              <Row row={row} index={index} />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
