@@ -1,8 +1,7 @@
-import { Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { Box, Modal } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const Screen = ({ soBaoDanhs, selectedTable }) => {
   const [open, setOpen] = useState(false);
@@ -130,11 +129,11 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
         <div className="w-full p-8 text-center rounded-md bg-sky-100">
           <div className="flex flex-row items-center justify-around	 w-full h-full">
             <div>
-              <div>Số báo danh</div>
+              <div className="font-black text-5xl">Gà</div>
               <div>{soBaoDanhs.ga1}</div>
             </div>
             <div>
-              <div>Số báo danh</div>
+              <div className="font-black text-5xl">Gà</div>
               <div>{soBaoDanhs.ga2}</div>
             </div>
           </div>

@@ -1,24 +1,23 @@
-import React, { useState } from "react";
-import Screen from "../components/Screen";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
   Box,
+  InputLabel,
+  MenuItem,
   Modal,
+  Select,
   Tab,
   Tooltip,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { FaRegPlusSquare, FaUserPlus } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
-import { addPlayer, updatePlayer } from "../redux/action/playerActions";
-import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
+import Screen from "../components/Screen";
 import CollapsibleTable from "../components/TableCollapse";
+import { addPlayer, updatePlayer } from "../redux/action/playerActions";
 import { addTable } from "../redux/action/tableActions";
-import { addUser, updateUser } from "../redux/action/userActions";
+import { addUser, addUsers, updateUser } from "../redux/action/userActions";
 const style = {
   position: "absolute",
   top: "50%",
@@ -121,13 +120,28 @@ function Home() {
         value: `${newNumTabs}`,
         soBaoDanhs: soBaoDanhs,
       };
+      const generateNameUser = (name) => {
+        if(name < 10) return "00" + name;
+        if(name >=10 && name <100) return "0" + name;
+        return name.toString();
+      }
+      const defaultUserOfTable = [...Array(999).keys()].map(user => {
+        return {
+          id: uuidv4(),
+          name: generateNameUser(user + 1),
+          tableId: newTabData.id
+        }
+      })
+
       setNumTabs(newNumTabs);
       dispatch(addTable(newTabData));
+      setSelectedTable(newTabData);
+      dispatch(addUsers(defaultUserOfTable))
       setOpenThemBanChoi(false);
       setValueTabs((parseInt(valueTabs) + 1).toString());
     }
   };
-  const handleSave = (e) => {
+  const handleSave = (e, newUser) => {
     e.preventDefault();
     const now = new Date();
     const formattedDate = now.toLocaleString();
