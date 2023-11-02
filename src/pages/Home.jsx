@@ -1,11 +1,11 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
+  Autocomplete,
   Box,
   InputLabel,
-  MenuItem,
   Modal,
-  Select,
   Tab,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -60,7 +60,6 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [openThemBanChoi, setOpenThemBanChoi] = useState(false);
   const [openAddUserToTable, setOpenAddUserToTable] = useState(false);
-  const [player, setPlayer] = useState({});
   const [dataTabs, setDataTabs] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const dispatch = useDispatch();
@@ -93,21 +92,12 @@ function Home() {
     setValueTabs(newValue);
   };
 
-  const handleOnChange = (e) => {
-    setPlayer((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
   const handleOnChangeTable = (e) => {
     setSoBaoDanh((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleCreateTab = () => {
     setOpenThemBanChoi(true);
-  };
-  const handleEdit = (selectedPlayer) => {
-    // When editing an existing player, set isEditMode to true and populate the form with player data
-    setIsEditMode(true);
-    setPlayer(selectedPlayer);
   };
 
   const handleSaveTable = (e) => {
@@ -121,22 +111,22 @@ function Home() {
         soBaoDanhs: soBaoDanhs,
       };
       const generateNameUser = (name) => {
-        if(name < 10) return "00" + name;
-        if(name >=10 && name <100) return "0" + name;
+        if (name < 10) return "00" + name;
+        if (name >= 10 && name < 100) return "0" + name;
         return name.toString();
-      }
-      const defaultUserOfTable = [...Array(999).keys()].map(user => {
+      };
+      const defaultUserOfTable = [...Array(999).keys()].map((user) => {
         return {
           id: uuidv4(),
           name: generateNameUser(user + 1),
-          tableId: newTabData.id
-        }
-      })
+          tableId: newTabData.id,
+        };
+      });
 
       setNumTabs(newNumTabs);
       dispatch(addTable(newTabData));
       setSelectedTable(newTabData);
-      dispatch(addUsers(defaultUserOfTable))
+      dispatch(addUsers(defaultUserOfTable));
       setOpenThemBanChoi(false);
       setValueTabs((parseInt(valueTabs) + 1).toString());
     }
@@ -279,53 +269,40 @@ function Home() {
                   <InputLabel className="peer-focus:font-medium absolute text-sm text-gray-500 \ duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                     Người chơi 1
                   </InputLabel>
-                  <Select
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  <Autocomplete
+                    id="combo-box-demo"
                     value={selectedUser1}
-                    onChange={(e) => {
-                      setSelectedUser1(e.target.value);
+                    onChange={(e, value) => {
+                      setSelectedUser1(value);
                     }}
-                    required
-                  >
-                    {userReducer
-                      .filter(
-                        (a) =>
-                          a !== selectedUser2 && a.tableId === selectedTable.id
-                      )
-                      .map((user, index) => {
-                        return (
-                          <MenuItem key={index} value={user}>
-                            {user.name}
-                          </MenuItem>
-                        );
-                      })}
-                  </Select>
+                    options={userReducer.filter(
+                      (a) =>
+                        a !== selectedUser2 && a.tableId === selectedTable.id
+                    )}
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => (
+                      <TextField {...params} label="freeSolo" />
+                    )}
+                  />
                 </div>
                 <div className="relative z-0 w-full mb-6 group">
                   <InputLabel className="peer-focus:font-medium absolute text-sm text-gray-500 \ duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                     Người chơi 2
                   </InputLabel>
-                  <Select
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    value={selectedUser2}
-                    onChange={(e) => {
-                      setSelectedUser2(e.target.value);
+                  <Autocomplete
+                    id="combo-box-demo"
+                    onChange={(e, value) => {
+                      setSelectedUser2(value);
                     }}
-                    required
-                  >
-                    {userReducer
-                      .filter(
-                        (a) =>
-                          a !== selectedUser1 && a.tableId === selectedTable.id
-                      )
-                      .map((user, index) => {
-                        return (
-                          <MenuItem key={index} value={user}>
-                            {user.name}
-                          </MenuItem>
-                        );
-                      })}
-                  </Select>
+                    options={userReducer.filter(
+                      (a) =>
+                        a !== selectedUser1 && a.tableId === selectedTable.id
+                    )}
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => (
+                      <TextField {...params} label="freeSolo" />
+                    )}
+                  />
                 </div>
               </div>
               <div className="grid md:grid-cols-2 md:gap-6">
@@ -340,7 +317,7 @@ function Home() {
                     onChange={(e) => {
                       const newUser = {
                         ...selectedUser1,
-                        tienCuoc: e.target.value,
+                        tienCuoc: parseInt(e.target.value) * 1000000,
                       };
                       dispatch(updateUser(newUser));
                     }}
@@ -363,7 +340,7 @@ function Home() {
                     onChange={(e) => {
                       const newUser = {
                         ...selectedUser2,
-                        tienCuoc: e.target.value,
+                        tienCuoc: parseInt(e.target.value) * 1000000,
                       };
                       dispatch(updateUser(newUser));
                     }}
@@ -380,7 +357,7 @@ function Home() {
               <div className="flex justify-around mx-[20%]">
                 <button
                   type="reset"
-                  onClick={(e) => setPlayer({})}
+                  onClick={() => setIsEditMode(true)}
                   className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-red-100 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 "
                 >
                   <span className="relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">

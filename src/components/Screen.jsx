@@ -160,13 +160,19 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
         <Box sx={style}>
           <div className="flex justify-center">
             <div className="w-[600px] p-10 border border-solid rounded-md">
-              {list.map((value, index) => {
-                return (
-                  <div key={index}>
-                    {value.name}: {value.total}
-                  </div>
-                );
-              })}
+              {list
+                .filter((value) => value.total !== 0)
+                .map((value, index) => {
+                  return (
+                    <div key={index}>
+                      {value.name}:
+                      {value.total.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </Box>
