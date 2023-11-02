@@ -82,7 +82,6 @@ function Home() {
   });
 
   useEffect(() => {
-    // setDataTabs(playerReducer?.players);
     setDataTabs(
       playerReducer?.players?.filter((item) => item.roomID === valueTabs)
     );
@@ -131,7 +130,7 @@ function Home() {
       setValueTabs((parseInt(valueTabs) + 1).toString());
     }
   };
-  const handleSave = (e, newUser) => {
+  const handleSave = (e) => {
     e.preventDefault();
     const now = new Date();
     const formattedDate = now.toLocaleString();
@@ -159,6 +158,8 @@ function Home() {
       });
       dispatch(addPlayer(newPlayer));
       setOpen(false);
+      setSelectedUser1(null);
+      setSelectedUser2(null);
     }
   };
 
@@ -280,6 +281,7 @@ function Home() {
                         a !== selectedUser2 && a.tableId === selectedTable.id
                     )}
                     getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option, value) => option === value}
                     renderInput={(params) => (
                       <TextField {...params} label="freeSolo" />
                     )}
@@ -299,6 +301,7 @@ function Home() {
                         a !== selectedUser1 && a.tableId === selectedTable.id
                     )}
                     getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option, value) => option === value}
                     renderInput={(params) => (
                       <TextField {...params} label="freeSolo" />
                     )}
