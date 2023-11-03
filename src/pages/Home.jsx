@@ -1,13 +1,5 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import {
-  Autocomplete,
-  Box,
-  InputLabel,
-  Modal,
-  Tab,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Autocomplete, Avatar, Box, InputLabel, Modal, Tab, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { FaRegPlusSquare, FaUserPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +10,8 @@ import CollapsibleTable from "../components/TableCollapse";
 import { addPlayer, updatePlayer } from "../redux/action/playerActions";
 import { addTable } from "../redux/action/tableActions";
 import { addUser, addUsers, updateUser } from "../redux/action/userActions";
+import logo from "../data/daga.png";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -82,9 +76,7 @@ function Home() {
   });
 
   useEffect(() => {
-    setDataTabs(
-      playerReducer?.players?.filter((item) => item.roomID === valueTabs)
-    );
+    setDataTabs(playerReducer?.players?.filter((item) => item.roomID === valueTabs));
   }, [valueTabs, playerReducer?.players]);
 
   const handleChange = (event, newValue) => {
@@ -136,14 +128,8 @@ function Home() {
     const formattedDate = now.toLocaleString();
     var handleData = {
       tableId: selectedTable.id,
-      idRed: userReducer.find(
-        (user) =>
-          user.id === selectedUser1.id && user.tableId === selectedTable.id
-      ),
-      idBlue: userReducer.find(
-        (user) =>
-          user.id === selectedUser2.id && user.tableId === selectedTable.id
-      ),
+      idRed: userReducer.find((user) => user.id === selectedUser1.id && user.tableId === selectedTable.id),
+      idBlue: userReducer.find((user) => user.id === selectedUser2.id && user.tableId === selectedTable.id),
       createAt: formattedDate,
     };
     if (isEditMode) {
@@ -184,14 +170,16 @@ function Home() {
 
   return (
     <>
-      <div className="text-end">
+      <div className="flex items-center justify-between">
+        <Avatar src={logo} alt="logo" sx={{ width: 120, height: 120 }} />
+        <p className="text-[#3d0f7d] font-bold ml-2 text-4xl uppercase">Trường gà quốc tế VIETNAM-LAOS </p>
         <Tooltip title="Tối đa 5 bàn chơi">
           <button
             className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-red-100 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 "
             onClick={handleCreateTab}
           >
             <span className="flex items-center relative rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 ">
-              Thêm bàn chơi
+              ➕ Thêm bàn chơi
             </span>
           </button>
         </Tooltip>
@@ -208,12 +196,12 @@ function Home() {
                 key={tab.value}
                 label={tab.label}
                 value={tab.value}
-                className="!rounded-2xl"
+                className="!rounded-2xl !font-bold !mt-2"
               />
             ))}
           </TabList>
         </Box>
-        <div className="bg-teal-100 !rounded-2xl mt-2">
+        <div className="bg-[url('./data/dagarmbg.png')] bg-yellow-100 bg-[length:110px_110px] object-cover bg-center min-h-[600px] !rounded-2xl mt-2">
           {tableReducer.map((tab) => (
             <TabPanel key={tab.value} value={tab.value}>
               <div className="flex flex-col items-center justify-center ">
@@ -238,11 +226,7 @@ function Home() {
                     </span>
                   </button>
                 </div>
-                <Screen
-                  data={dataTabs}
-                  soBaoDanhs={tab.soBaoDanhs}
-                  selectedTable={selectedTable}
-                />
+                <Screen data={dataTabs} soBaoDanhs={tab.soBaoDanhs} selectedTable={selectedTable} />
                 <CollapsibleTable selectedTable={selectedTable} />
               </div>
             </TabPanel>
@@ -261,10 +245,7 @@ function Home() {
       >
         <Box sx={style}>
           <div className="flex justify-center">
-            <form
-              onSubmit={handleSave}
-              className="w-[600px] p-10 border border-solid rounded-md"
-            >
+            <form onSubmit={handleSave} className="w-[600px] p-10 border border-solid rounded-md">
               <div className="grid md:grid-cols-2 md:gap-6">
                 <div className="relative z-0 w-full mb-6 group">
                   <InputLabel className="peer-focus:font-medium absolute text-sm text-gray-500 \ duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
@@ -276,15 +257,10 @@ function Home() {
                     onChange={(e, value) => {
                       setSelectedUser1(value);
                     }}
-                    options={userReducer.filter(
-                      (a) =>
-                        a !== selectedUser2 && a.tableId === selectedTable.id
-                    )}
+                    options={userReducer.filter((a) => a !== selectedUser2 && a.tableId === selectedTable.id)}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, value) => option === value}
-                    renderInput={(params) => (
-                      <TextField {...params} label="freeSolo" />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="freeSolo" />}
                   />
                 </div>
                 <div className="relative z-0 w-full mb-6 group">
@@ -296,15 +272,10 @@ function Home() {
                     onChange={(e, value) => {
                       setSelectedUser2(value);
                     }}
-                    options={userReducer.filter(
-                      (a) =>
-                        a !== selectedUser1 && a.tableId === selectedTable.id
-                    )}
+                    options={userReducer.filter((a) => a !== selectedUser1 && a.tableId === selectedTable.id)}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, value) => option === value}
-                    renderInput={(params) => (
-                      <TextField {...params} label="freeSolo" />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="freeSolo" />}
                   />
                 </div>
               </div>
@@ -389,10 +360,7 @@ function Home() {
       >
         <Box sx={style}>
           <div className="flex justify-center">
-            <form
-              onSubmit={handleSaveTable}
-              className="w-[600px] p-10 border border-solid rounded-md"
-            >
+            <form onSubmit={handleSaveTable} className="w-[600px] p-10 border border-solid rounded-md">
               <div className="grid md:grid-cols-2 md:gap-6">
                 <div className="relative z-0 w-full mb-6 group">
                   <input
@@ -461,10 +429,7 @@ function Home() {
       >
         <Box sx={style}>
           <div className="flex justify-center">
-            <form
-              onSubmit={handleSaveUserToTable}
-              className="w-[600px] p-10 border border-solid rounded-md"
-            >
+            <form onSubmit={handleSaveUserToTable} className="w-[600px] p-10 border border-solid rounded-md">
               <div>
                 <div className="relative z-0 w-full mb-6 group">
                   <input

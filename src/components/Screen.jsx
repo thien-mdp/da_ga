@@ -23,9 +23,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
   });
 
   const caculate = (thang) => {
-    const filterUserFromTable = userReducer.filter(
-      (a) => a.tableId === selectedTable.id
-    );
+    const filterUserFromTable = userReducer.filter((a) => a.tableId === selectedTable.id);
     const tong = filterUserFromTable.map((a) => {
       let total = 0;
       if (thang === "RED") {
@@ -33,11 +31,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
           (b) => b.idRed.id === a.id && b.tableId === selectedTable.id
         );
         const sum = filterUserSelectedRedPlayerTable.reduce(
-          (acc, current) =>
-            acc +
-            parseInt(
-              current.idBlue.tienCuoc - (current.idBlue.tienCuoc * 5) / 100
-            ),
+          (acc, current) => acc + parseInt(current.idBlue.tienCuoc - (current.idBlue.tienCuoc * 5) / 100),
           0
         );
         const filterUserSelectedBluePlayerTable = playerReducer.filter(
@@ -52,20 +46,13 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
           (b) => b.idBlue.id === a.id && b.tableId === selectedTable.id
         );
         const sum = filterUserSelectedBluePlayerTable.reduce(
-          (acc, current) =>
-            acc +
-            parseInt(
-              current.idRed.tienCuoc - (current.idRed.tienCuoc * 5) / 100
-            ),
+          (acc, current) => acc + parseInt(current.idRed.tienCuoc - (current.idRed.tienCuoc * 5) / 100),
           0
         );
         const filterUserSelectedRedPlayerTable = playerReducer.filter(
           (b) => b.idRed.id === a.id && b.tableId === selectedTable.id
         );
-        total = filterUserSelectedRedPlayerTable.reduce(
-          (acc, current) => acc - parseInt(current.idRed.tienCuoc),
-          sum
-        );
+        total = filterUserSelectedRedPlayerTable.reduce((acc, current) => acc - parseInt(current.idRed.tienCuoc), sum);
       }
       return {
         name: a.name,
@@ -125,26 +112,27 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
 
   return (
     <>
-      <div className="w-2/3 p-1 my-4 rounded-lg bg-gradient-to-r from-indigo-200 to-cyan-200">
-        <div className="w-full p-8 text-center rounded-md bg-sky-100">
+      {/* <div className="w-2/3 p-1 my-4 rounded-lg bg-gradient-to-r from-indigo-200 to-cyan-200"> */}
+      <div className="w-2/3 p-1 my-4 rounded-lg bg-[#ffffffbc]">
+        <div className="w-full p-8 text-center rounded-md ">
           <div className="flex flex-row items-center justify-around	 w-full h-full">
-            <div>
-              <div className="font-black text-5xl">Gà</div>
-              <div>{soBaoDanhs.ga1}</div>
+            <div className="font-black text-[#da0f1f]">
+              <div className="text-5xl ">Gà</div>
+              <div className="text-2xl font-semibold">{soBaoDanhs.ga1}</div>
             </div>
-            <div>
-              <div className="font-black text-5xl">Gà</div>
-              <div>{soBaoDanhs.ga2}</div>
+            <div className="font-black text-[#411675]">
+              <div className="text-5xl  ">Gà</div>
+              <div className="text-2xl font-semibold">{soBaoDanhs.ga2}</div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-6 !my-5 !w-full">
             <Button onClick={chooseRed} className="w-full !p-0 !rounded-2xl">
-              <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-rose-400 rounded-2xl">
+              <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-[#da0f1f] rounded-2xl">
                 Đỏ
               </div>
             </Button>
             <Button onClick={chooseBlue} className="w-full !p-0 !rounded-2xl">
-              <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-gray-800 bg-blue-400 rounded-2xl">
+              <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-[#411675] rounded-2xl">
                 <div>Xanh</div>
               </div>
             </Button>
