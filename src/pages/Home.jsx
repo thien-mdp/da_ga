@@ -262,7 +262,7 @@ function Home() {
                     options={userReducer.filter((a) => a !== selectedUser2 && a.tableId === selectedTable.id)}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, value) => option === value}
-                    renderInput={(params) => <TextField {...params} label="freeSolo" />}
+                    renderInput={(params) => <TextField {...params} label="" />}
                   />
                 </div>
                 <div className="relative z-0 w-full mb-6 group">
@@ -274,11 +274,11 @@ function Home() {
                     onChange={(e, value) => {
                       setSelectedUser2(value);
                     }}
-                    style={{ backgroundColor: "#411675bc", borderRadius: "7px" }}
+                    style={{ backgroundColor: "#0f59aebc", borderRadius: "7px" }}
                     options={userReducer.filter((a) => a !== selectedUser1 && a.tableId === selectedTable.id)}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, value) => option === value}
-                    renderInput={(params) => <TextField {...params} label="freeSolo" />}
+                    renderInput={(params) => <TextField {...params} label="" />}
                   />
                 </div>
               </div>

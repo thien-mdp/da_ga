@@ -120,7 +120,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
               <div className="text-5xl ">Gà</div>
               <div className="text-2xl font-semibold">{soBaoDanhs.ga1}</div>
             </div>
-            <div className="font-black text-[#411675]">
+            <div className="font-black text-[#0f59ae]">
               <div className="text-5xl  ">Gà</div>
               <div className="text-2xl font-semibold">{soBaoDanhs.ga2}</div>
             </div>
@@ -132,7 +132,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
               </div>
             </Button>
             <Button onClick={chooseBlue} className="w-full !p-0 !rounded-2xl">
-              <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-[#411675] rounded-2xl">
+              <div className="flex items-center justify-center w-full h-full p-6 text-5xl text-white bg-[#0f59ae] rounded-2xl">
                 <div>Xanh</div>
               </div>
             </Button>
