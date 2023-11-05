@@ -11,6 +11,7 @@ import { addPlayer, updatePlayer } from "../redux/action/playerActions";
 import { addTable } from "../redux/action/tableActions";
 import { addUser, addUsers, updateUser } from "../redux/action/userActions";
 import logo from "../data/daga.png";
+import logo2 from "../data/dagarmbg.png";
 
 const style = {
   position: "absolute",
@@ -171,8 +172,8 @@ function Home() {
   return (
     <>
       <div className="flex items-center justify-between">
-        <Avatar src={logo} alt="logo" sx={{ width: 120, height: 120 }} />
-        <p className="text-[#3d0f7d] font-bold ml-2 text-4xl uppercase">Trường gà quốc tế VIETNAM-LAOS </p>
+        <Avatar src={logo2} alt="logo" sx={{ width: 120, height: 120 }} />
+        <p className="text-[#3d0f7d] font-bold ml-2 text-4xl uppercase">⭐ Trường gà quốc tế VIETNAM-LAOS ⭐</p>
         <Tooltip title="Tối đa 5 bàn chơi">
           <button
             className="group relative mb-2 mr-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-red-200 via-red-300 to-yellow-200 p-0.5 text-sm font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-red-100 group-hover:from-red-200 group-hover:via-red-300 group-hover:to-yellow-200 "
@@ -257,6 +258,7 @@ function Home() {
                     onChange={(e, value) => {
                       setSelectedUser1(value);
                     }}
+                    style={{ backgroundColor: "#da0f20bc", borderRadius: "7px" }}
                     options={userReducer.filter((a) => a !== selectedUser2 && a.tableId === selectedTable.id)}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, value) => option === value}
@@ -272,6 +274,7 @@ function Home() {
                     onChange={(e, value) => {
                       setSelectedUser2(value);
                     }}
+                    style={{ backgroundColor: "#411675bc", borderRadius: "7px" }}
                     options={userReducer.filter((a) => a !== selectedUser1 && a.tableId === selectedTable.id)}
                     getOptionLabel={(option) => option.name}
                     isOptionEqualToValue={(option, value) => option === value}
