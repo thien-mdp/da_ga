@@ -1,7 +1,7 @@
 FROM node:20
 WORKDIR /da-ga
 
-COPY package.json .
+COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . .
