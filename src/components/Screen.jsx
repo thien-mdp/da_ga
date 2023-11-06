@@ -7,7 +7,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
   const [open, setOpen] = useState(false);
   const playerReducer = useSelector((state) => state.playerReducer.players);
   const userReducer = useSelector((state) => state.userReducer.users);
-  const [list, setList] = useState([]);
+  const [list, setList] = useState({});
 
   const Toast = Swal.mixin({
     toast: true,
@@ -23,7 +23,10 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
   });
 
   const caculate = (thang) => {
-    const filterUserFromTable = userReducer.filter((a) => a.tableId === selectedTable.id);
+    const filterUserFromTable = userReducer.filter(
+      (a) => a.tableId === selectedTable.id
+    );
+    let hoaHong = 0;
     const tong = filterUserFromTable.map((a) => {
       let total = 0;
       if (thang === "RED") {
@@ -31,8 +34,16 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
           (b) => b.idRed.id === a.id && b.tableId === selectedTable.id
         );
         const sum = filterUserSelectedRedPlayerTable.reduce(
-          (acc, current) => acc + parseInt(current.idBlue.tienCuoc - (current.idBlue.tienCuoc * 5) / 100),
+          (acc, current) =>
+            acc +
+            parseInt(
+              current.idBlue.tienCuoc - (current.idBlue.tienCuoc * 5) / 100
+            ),
           0
+        );
+        hoaHong = filterUserSelectedRedPlayerTable.reduce(
+          (acc, current) => acc + parseInt((current.idBlue.tienCuoc * 5) / 100),
+          hoaHong
         );
         const filterUserSelectedBluePlayerTable = playerReducer.filter(
           (b) => b.idBlue.id === a.id && b.tableId === selectedTable.id
@@ -46,20 +57,31 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
           (b) => b.idBlue.id === a.id && b.tableId === selectedTable.id
         );
         const sum = filterUserSelectedBluePlayerTable.reduce(
-          (acc, current) => acc + parseInt(current.idRed.tienCuoc - (current.idRed.tienCuoc * 5) / 100),
+          (acc, current) =>
+            acc +
+            parseInt(
+              current.idRed.tienCuoc - (current.idRed.tienCuoc * 5) / 100
+            ),
           0
+        );
+        hoaHong = filterUserSelectedBluePlayerTable.reduce(
+          (acc, current) => acc + parseInt((current.idRed.tienCuoc * 5) / 100),
+          hoaHong
         );
         const filterUserSelectedRedPlayerTable = playerReducer.filter(
           (b) => b.idRed.id === a.id && b.tableId === selectedTable.id
         );
-        total = filterUserSelectedRedPlayerTable.reduce((acc, current) => acc - parseInt(current.idRed.tienCuoc), sum);
+        total = filterUserSelectedRedPlayerTable.reduce(
+          (acc, current) => acc - parseInt(current.idRed.tienCuoc),
+          sum
+        );
       }
       return {
         name: a.name,
         total: total,
       };
     });
-    setList(tong);
+    setList({ hoaHong: hoaHong, tong: tong });
   };
 
   const chooseRed = () => {
@@ -148,8 +170,15 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
         <Box sx={style}>
           <div className="flex justify-center">
             <div className="w-[600px] p-10 border border-solid rounded-md">
-              {list
-                .filter((value) => value.total !== 0)
+              <h1 className="text-black-500">
+                HOA HỒNG:{" "}
+                {list.hoaHong?.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </h1>
+              {list.tong
+                ?.filter((value) => value.total !== 0)
                 .map((value, index) => {
                   return (
                     <div key={index}>
