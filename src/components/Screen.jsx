@@ -1,4 +1,15 @@
-import { Box, Button, Modal } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
@@ -128,8 +139,9 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
     boxShadow: 24,
     borderRadius: "6px",
     zIndex: 1600,
-    height: "auto",
     width: "auto",
+    overflow: "scroll",
+    height: "50%",
   };
 
   return (
@@ -168,30 +180,47 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div className="flex justify-center">
-            <div className="w-[600px] p-10 border border-solid rounded-md">
-              <h1 className="text-black-500">
-                HOA HỒNG:{" "}
-                {list.hoaHong?.toLocaleString("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                })}
-              </h1>
-              {list.tong
-                ?.filter((value) => value.total !== 0)
-                .map((value, index) => {
-                  return (
-                    <div key={index}>
-                      {value.name}:
-                      {value.total.toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center" colSpan={2}>
+                    Chi tiết
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    HOA HỒNG:{" "}
+                    {list.hoaHong?.toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Tên</TableCell>
+                  <TableCell>Tiền</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {list.tong
+                  ?.filter((value) => value.total !== 0)
+                  ?.map((value, index) => {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{value.name}</TableCell>
+                        <TableCell>
+                          {value.total.toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </Modal>
     </>
