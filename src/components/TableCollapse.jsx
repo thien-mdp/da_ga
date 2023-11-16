@@ -14,7 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deletePlayer } from "../redux/action/playerActions";
 
 function Row(props) {
@@ -40,6 +40,8 @@ function Row(props) {
     setOpenModalConfirm(false);
   };
 
+  console.log(row.user_bets[index].money);
+
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -60,7 +62,7 @@ function Row(props) {
           {index + 1}
         </TableCell>
         <TableCell component="th" scope="row" className="!font-medium ">
-          Ván cược của sbd {row.idRed.name} & {row.idBlue.name}
+          Ván cược của sbd &
         </TableCell>
         <TableCell component="th" scope="row" className="!font-medium ">
           <IconButton aria-label="edit" size="large">
@@ -94,18 +96,22 @@ function Row(props) {
                 <TableBody>
                   <TableRow>
                     <TableCell component="th" scope="row">
-                      {row.createAt}
+                      {row.created_at}
                     </TableCell>
-                    <TableCell align="center">{row.idRed.name}</TableCell>
+                    <TableCell align="center"></TableCell>
                     <TableCell align="right">
-                      {parseInt(row.idRed.tienCuoc).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {parseInt(row.user_bets[0].money).toLocaleString(
+                        "vi-VN",
+                        {
+                          style: "currency",
+                          currency: "VND",
+                        }
+                      )}
                     </TableCell>
                     <TableCell align="right">
                       {parseInt(
-                        row.idBlue.tienCuoc - (row.idBlue.tienCuoc * 5) / 100
+                        row.user_bets[1].money -
+                          (row.user_bets[1].money * 5) / 100
                       ).toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
@@ -114,18 +120,22 @@ function Row(props) {
                   </TableRow>
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
-                      {row.createAt}
+                      {row.created_at}
                     </TableCell>
-                    <TableCell align="center">{row.idBlue.name}</TableCell>
+                    <TableCell align="center"></TableCell>
                     <TableCell align="right">
-                      {parseInt(row.idBlue.tienCuoc).toLocaleString("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                      })}
+                      {parseInt(row.user_bets[1].money).toLocaleString(
+                        "vi-VN",
+                        {
+                          style: "currency",
+                          currency: "VND",
+                        }
+                      )}
                     </TableCell>
                     <TableCell align="right">
                       {parseInt(
-                        row.idRed.tienCuoc - (row.idRed.tienCuoc * 5) / 100
+                        row.user_bets[0].money -
+                          (row.user_bets[0].money * 5) / 100
                       ).toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
@@ -178,7 +188,6 @@ function Row(props) {
 }
 
 export default function CollapsibleTable({ selectedTable }) {
-  const playerReducer = useSelector((state) => state.playerReducer.players);
   return (
     <TableContainer className="!rounded-md" component={Paper}>
       <Table aria-label="collapsible table">
@@ -193,11 +202,9 @@ export default function CollapsibleTable({ selectedTable }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {playerReducer
-            .filter((a, index) => a.tableId === selectedTable.id)
-            ?.map((row, index) => (
-              <Row key={index} row={row} index={index} />
-            ))}
+          {selectedTable?.bets?.map((row, index) => (
+            <Row key={index} row={row} index={index} />
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

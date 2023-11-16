@@ -3,6 +3,11 @@ export const addTable = (table) => ({
   payload: table,
 });
 
+export const addTables = (tables) => ({
+  type: "ADD_TABLES",
+  payload: tables,
+});
+
 export const updateTable = (table) => ({
   type: "UPDATE_TABLE",
   payload: table,

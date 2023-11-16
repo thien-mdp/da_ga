@@ -1,13 +1,16 @@
-import React from 'react';
-import Home from './pages/Home';
+import React from "react";
 import { Provider } from "react-redux";
-import store from './store';
-
+import Loading from "./components/Loading";
+import Toast from "./components/Toast";
+import Home from "./pages/Home";
+import store from "./store";
 
 function App() {
   return (
     <Provider store={store}>
-      <div className='w-full h-full min-h-screen p-12 bg-[#ffff00]'>
+      <Loading />
+      <Toast />
+      <div className="w-full h-full min-h-screen p-12 bg-[#ffff00]">
         <Home />
       </div>
     </Provider>

@@ -11,27 +11,16 @@ import {
   TableRow,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { dispatchMessage } from "../redux/action/messageAction";
 
-const Screen = ({ soBaoDanhs, selectedTable }) => {
+const Screen = ({ selectedTable }) => {
   const [open, setOpen] = useState(false);
   const playerReducer = useSelector((state) => state.playerReducer.players);
   const userReducer = useSelector((state) => state.userReducer.users);
   const [list, setList] = useState({});
-
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    width: 320,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
+  const dispatch = useDispatch();
 
   const caculate = (thang) => {
     const filterUserFromTable = userReducer.filter(
@@ -102,10 +91,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
       confirmButtonText: "OK",
     }).then((result) => {
       if (result.isConfirmed) {
-        Toast.fire({
-          icon: "success",
-          title: "Đỏ thắng!",
-        });
+        dispatch(dispatchMessage({ status: "success", message: "Đỏ thắng" }));
         setOpen(true);
         caculate("RED");
       }
@@ -119,10 +105,7 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Toast.fire({
-          icon: "success",
-          title: "Xanh thắng!",
-        });
+        dispatch(dispatchMessage({ status: "success", message: "Xanh thắng" }));
       }
       setOpen(true);
       caculate("BLUE");
@@ -152,11 +135,15 @@ const Screen = ({ soBaoDanhs, selectedTable }) => {
           <div className="flex flex-row items-center justify-around	 w-full h-full">
             <div className="font-black text-[#da0f1f]">
               <div className="text-5xl ">Gà</div>
-              <div className="text-2xl font-semibold">{soBaoDanhs.ga1}</div>
+              <div className="text-2xl font-semibold">
+                {selectedTable?.name_chicken_red ?? ""}
+              </div>
             </div>
             <div className="font-black text-[#0f59ae]">
               <div className="text-5xl  ">Gà</div>
-              <div className="text-2xl font-semibold">{soBaoDanhs.ga2}</div>
+              <div className="text-2xl font-semibold">
+                {selectedTable?.name_chicken_blue ?? ""}
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-6 !my-5 !w-full">

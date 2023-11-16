@@ -9,6 +9,11 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         tables: [...state.tables, action.payload],
       };
+    case "ADD_TABLES":
+      return {
+        ...state,
+        tables: [...state.tables, ...action.payload],
+      };
     case "UPDATE_TABLE":
       return {
         ...state,
